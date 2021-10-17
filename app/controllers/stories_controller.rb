@@ -25,6 +25,11 @@ class StoriesController < ApplicationController
   # POST /stories.json
   def create
     @story = Story.new(story_params)
+   
+   if session[:user_id].present?
+      @user = User.find(session[:user_id])
+      @story.user = @user 
+    end
 
     respond_to do |format|
       if @story.save
@@ -41,6 +46,7 @@ class StoriesController < ApplicationController
   # PATCH/PUT /stories/1.json
   def update
     respond_to do |format|
+     
       if @story.update(story_params)
         format.html { redirect_to @story, notice: 'Story was successfully updated.' }
         format.json { render :show, status: :ok, location: @story }
